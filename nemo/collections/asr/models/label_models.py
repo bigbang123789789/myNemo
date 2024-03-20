@@ -419,7 +419,8 @@ class EncDecSpeakerLabelModel(ModelPT, ExportableEncDecModel):
         self.log(f'{tag}_acc_macro', macro_accuracy_score, sync_dist=True)
         print(f'{tag}_loss : ', loss_mean)
         print(f'{tag}_acc_macro :', macro_accuracy_score)
-
+        torch.save(self.state_dict(),'/content/drive/MyDrive/titanet.pt')
+        
         return {
             f'{tag}_loss': loss_mean,
             f'{tag}_acc_micro_top_k': topk_scores,
