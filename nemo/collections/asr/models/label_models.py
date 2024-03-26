@@ -590,7 +590,7 @@ class EncDecSpeakerLabelModel(ModelPT, ExportableEncDecModel):
             logging.info(" two audio files are from different speakers")
             return False
     @torch.no_grad()
-    def get_similarity_score(self, path2audio_file1, path2audio_file2, threshold=0.7):
+    def get_similarity_score(self, path2audio_file1, path2audio_file2):
         """
         similarity score of two audio files 
         Args:
