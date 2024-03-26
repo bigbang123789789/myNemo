@@ -589,7 +589,26 @@ class EncDecSpeakerLabelModel(ModelPT, ExportableEncDecModel):
         else:
             logging.info(" two audio files are from different speakers")
             return False
+    @torch.no_grad()
+    def get_similarity_score(self, path2audio_file1, path2audio_file2, threshold=0.7):
+        """
+        similarity score of two audio files 
+        Args:
+            path2audio_file1: path to audio wav file of speaker 1
+            path2audio_file2: path to audio wav file of speaker 2
 
+        Returns:
+            similarity score
+        """
+        embs1 = self.get_embedding(path2audio_file1).squeeze()
+        embs2 = self.get_embedding(path2audio_file2).squeeze()
+        # Length Normalize
+        X = embs1 / torch.linalg.norm(embs1)
+        Y = embs2 / torch.linalg.norm(embs2)
+        # Score
+        similarity_score = torch.dot(X, Y) / ((torch.dot(X, X) * torch.dot(Y, Y)) ** 0.5)
+        similarity_score = (similarity_score + 1) / 2
+        return similarity_score
     @torch.no_grad()
     def batch_inference(self, manifest_filepath, batch_size=32, sample_rate=16000, device='cuda'):
         """
